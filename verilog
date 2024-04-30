@@ -1,0 +1,336 @@
+and gate
+  module andgate(a,b,c);
+ input a,b;
+ output c;
+ and a1(c,a,b);
+ endmodule
+
+ module andgate_tb;
+    reg a, b;
+    wire c;
+    and a1(c,a,b); // Module instantiation with parentheses
+
+    initial begin 
+        $dumpfile("andgate.vcd");
+        $dumpvars(0, andgate_tb);
+        a = 0; b = 0;
+        #10;
+        a = 0; b = 1;
+        #10;
+        a = 1; b = 0;
+        #10;
+        a = 1; b = 1;
+        #10;
+        $finish;
+    end
+endmodule
+
+
+xor gate
+
+
+module xorgate(a,b,out);
+input a,b;
+output out;
+xor a1(out,a,b);
+endmodule
+
+`include "xorgate.v"
+module xorgate_tb;
+reg a,b;
+wire out;
+xorgate a1(a,b,out);
+initial begin
+$dumpfile("xorgate.vcd");
+$dumpvars(0,xorgate_tb);
+a=0;b=0;
+#10
+a=0;b=1;
+#10
+a=1;b=0;
+#10
+a=1;b=1;
+#10
+$finish;
+end
+endmodule
+
+half adder
+module halfadder(
+    input a,
+    input b,
+    output sum,
+    output carry
+);
+
+    assign sum = a ^ b;  // XOR operation for sum
+    assign carry = a & b;  // AND operation for carry
+
+endmodule
+
+`include "halfadder.v" 
+
+module halfadder_tb;
+
+  
+    reg a, b;
+
+    
+    wire sum, carry;
+
+    
+    halfadder dut(
+        .a(a),
+        .b(b),
+        .sum(sum),
+        .carry(carry)
+    );
+
+   
+    initial begin
+        $dumpfile("halfadder_tb.vcd");
+        $dumpvars(0, halfadder_tb);
+
+        
+        a = 0; b = 0;
+        #10;
+
+        
+        a = 0; b = 1;
+        #10;
+
+    
+        a = 1; b = 0;
+        #10;
+
+       
+        a = 1; b = 1;
+        #10;
+
+        
+        $finish;
+    end
+
+endmodule
+
+
+
+fulladder
+
+ module fa(a,b,ci,s,co);
+ input a,b,ci;
+ output s,co;
+ assign s=(a*b)^ci;
+ assign co=(a^b)&ci|(a&b);
+ endmodule
+
+
+ `include "fulladder.v"
+ module fulladder_tb;
+ reg a,b,ci;
+ wire c,co;
+ fa f1(a,b,ci,s,co);
+ initial begin
+ $dumpfile("fulladder.vcd");
+ $dumpvars(0,fulladder_tb);
+ a=0;b=0;ci=0;
+ #10
+  a=0;b=0;ci=1;
+ #10
+  a=0;b=1;ci=0;
+ #10
+  a=0;b=1;ci=1;
+ #10
+  a=1;b=0;ci=0;
+ #10
+  a=1;b=0;ci=1;
+ #10
+  a=1;b=1;ci=0;
+ #10
+  a=1;b=1;ci=1;
+ #10
+ $finish;
+ end
+ endmodule
+multiplexer
+
+module mux(a,b,d0,d1,d2,d3,y);
+input a,b,d0,d1,d2,d3;
+output y;
+assign s1=((~a)&(~b)&d0);
+assign s2=((~a)&(b)&d1);
+assign s3=((a)&(~b)&d2);
+assign s4=((a)&(b)&d3);
+assign y =(s1|s2|s3|s4);
+endmodule
+
+
+`include "mux.v"
+module mux_tb;
+reg a,b,d0,d1,d2,d3;
+wire y;
+mux m1(a,b,d0,d1,d2,d3,y);
+initial begin
+$dumpfile("mux.vcd");
+$dumpvars(0,mux_tb);
+a=0;b=0;d0=0;d1=1;d2=0;d3=1;
+#10
+a=0;b=1;d0=0;d1=1;d2=0;d3=1;
+#10
+a=1;b=0;d0=0;d1=1;d2=0;d3=1;
+#10
+a=1;b=1;d0=0;d1=1;d2=0;d3=1;
+#10
+$finish;
+end
+endmodule
+
+
+
+decoder
+
+
+module decoder(a2,a1,a0,y0,y1,y2,y3,y4,y5,y6,y7);
+input a2,a1,a0;
+output y0,y1,y2,y3,y4,y5,y6,y7;
+assign y0=((~a2)&(~a1)&(~a0));
+assign y1=((~a2)&(~a1)&(a0));
+assign y2=((~a2)&(a1)&(~a0));
+assign y3=((~a2)&(a1)&(a0));
+assign y4=((a2)&(~a1)&(~a0));
+assign y5=((a2)&(~a1)&(a0));
+assign y6=((a2)&(a1)&(~a0));
+assign y7=((a2)&(a1)&(a0));
+endmodule
+
+`include "decoder.v"
+module decoder_tb;
+reg a2,a1,a0;
+wire y1,y2,y3,y4,y5,y6,y7;
+decoder d1( a2,a1,a0,y0,y1,y2,y3,y4,y5,y6,y7);
+initial begin
+$dumpfile("decoder.vcd");
+$dumpvars(0,decoder_tb);
+a2=0;a1=0;a0=0;
+#10
+a2=0;a1=0;a0=1;
+#10
+a2=0;a1=1;a0=0;
+#10
+a2=0;a1=1;a0=1;
+#10
+a2=1;a1=0;a0=0;
+#10
+a2=1;a1=0;a0=1;
+#10
+a2=1;a1=1;a0=0;
+#10
+a2=1;a1=1;a0=1;
+#10
+$finish;
+end
+endmodule
+
+jk flipflop
+
+ module jk(j,k,c,Q,Qc);
+input j,k;
+input c;
+output Q,Qc;
+reg Q,Qc;
+always @(posedge c)
+begin
+    if(j==0&&k==0)
+    
+    Q=Q;
+    if(j==0&&k==1)
+    Q=0;
+    if(j==1&&k==0)
+    Q=1;
+    if(j==1&&k==1)
+    Q=~Q;
+    assign Qc=~Q;
+end
+endmodule
+
+
+  `include "jk.v"
+
+module jk_tb;
+    reg c;
+    reg j,k;
+    wire Q, Qc;
+
+    
+    jk a1(j, k, c, Q,Qc);
+
+    initial begin
+        c = 0;
+        forever #1 c = ~c;
+    end
+
+    initial begin
+        $dumpfile("jk.vcd");
+        $dumpvars(0, jk_tb);
+        j = 1'b0;  
+        k = 1'b0;  
+        #4 $finish();
+    end
+
+    always #2 j = ~j;  
+    always #1 k = ~k;  
+endmodule
+
+
+pipelining
+
+
+ module pipe(a,b,c,d,clk,f);
+parameter N=10;
+input [N-1:0]a,b,c,d;
+input clk;
+output [N-1:0]f;
+reg[N-1:0]l12_x1,l12_x2,l12_d,l23_x3,l23_d,l34_f;
+wire L12_x1;
+assign f=l34_f;
+//first stage of pipeline
+always @(posedge clk)
+begin
+    l12_x1<=#4 a+b;
+    l12_x2<=#4 c-d;
+    l12_d<=d;
+end
+//2nd stage of pipeline
+always @(posedge clk)
+begin
+    l23_x3<= #4 l12_x1+l12_x2;
+    l23_d<=l12_d;
+end
+//3rd stage of pipeline
+always@(posedge clk)
+begin
+    l34_f<= #6 l23_x3*l23_d;
+end
+endmodule
+//testbench
+module pipe_test();
+parameter N=10;
+wire [N-1:0]f;
+reg [N-1:0]a,b,c,d;
+reg clk;
+pipe callpipe(.a(a),.b(b),.c(c),.d(d),.f(f),.clk(clk));
+initial clk=0;
+always #10 clk=~clk;
+initial begin
+    #5 a=10; b=12; c=6; d=2;
+    #20 a=10; b=10; c=5; d=3;
+    #20 a=20; b=11; c=1; d=4;
+    #20 a=12; b=15; c=4; d=2;
+end
+initial begin
+    $dumpfile("pipe3.vcd");
+    $dumpvars(0,pipe_test);
+    #300 
+    $finish();
+end
+endmodule
